@@ -1,5 +1,6 @@
 import { TopNav } from "@/components/layout/top-nav"
 import { MobileNav } from "@/components/layout/mobile-nav"
+import { DemoDisclaimer } from "@/components/demo/demo-disclaimer"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <MobileNav />
+      <DemoDisclaimer />
     </>
   )
 }
