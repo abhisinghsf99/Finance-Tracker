@@ -5,94 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
 import { formatCurrency } from "@/lib/plaid-amounts"
 import { useDashboardStore } from "@/lib/store/dashboard-store"
-
-interface PayoffResult {
-  monthlyPayment: number
-  totalPaid: number
-  totalInterest: number
-  months: number
-  warning: string | null
-}
-
-function calculatePayoff(
-  balance: number,
-  monthlyPayment: number,
-  annualRate: number,
-  maxMonths: number = 360
-): PayoffResult {
-  if (balance <= 0 || monthlyPayment <= 0) {
-    return { monthlyPayment, totalPaid: 0, totalInterest: 0, months: 0, warning: null }
-  }
-
-  // Pay off in one shot — no interest accrues
-  if (monthlyPayment >= balance) {
-    return {
-      monthlyPayment: balance,
-      totalPaid: balance,
-      totalInterest: 0,
-      months: 1,
-      warning: null,
-    }
-  }
-
-  const monthlyRate = annualRate / 100 / 12
-
-  if (monthlyRate === 0) {
-    const months = Math.ceil(balance / monthlyPayment)
-    return {
-      monthlyPayment,
-      totalPaid: balance,
-      totalInterest: 0,
-      months,
-      warning: null,
-    }
-  }
-
-  let remainingBalance = balance
-  let totalPaid = 0
-  let totalInterestPaid = 0
-  let month = 0
-
-  while (remainingBalance > 0.005 && month < maxMonths) {
-    const monthlyInterest = remainingBalance * monthlyRate
-
-    if (monthlyPayment <= monthlyInterest) {
-      return {
-        monthlyPayment,
-        totalPaid: 0,
-        totalInterest: 0,
-        months: 0,
-        warning:
-          "Payment doesn't cover interest — balance will grow",
-      }
-    }
-
-    // Final payment: pay remaining balance + that month's interest
-    const actualPayment = Math.min(monthlyPayment, remainingBalance + monthlyInterest)
-    const principal = actualPayment - monthlyInterest
-
-    totalInterestPaid += monthlyInterest
-    totalPaid += actualPayment
-    remainingBalance -= principal
-    month++
-  }
-
-  return {
-    monthlyPayment,
-    totalPaid,
-    totalInterest: totalInterestPaid,
-    months: month,
-    warning: null,
-  }
-}
-
-function calculateMinPaymentPayoff(
-  balance: number,
-  minPayment: number,
-  annualRate: number
-): PayoffResult {
-  return calculatePayoff(balance, minPayment, annualRate)
-}
+import { calculatePayoff, calculateMinPaymentPayoff } from "@/lib/payoff"
 
 export function PaymentCalculator() {
   const { accounts, creditLiabilities, getPurchaseAPR } = useDashboardStore()
@@ -117,10 +30,17 @@ export function PaymentCalculator() {
   // Slider range: minimum payment → full balance
   const sliderMin = Math.max(minPayment, 1)
   const sliderMax = Math.max(balance, sliderMin + 1)
+  const sliderStep = Math.max(1, Math.round(sliderMax / 200))
 
   // Default slider to minimum payment
+  const rawPayment = sliderValue[0] > 0 ? sliderValue[0] : sliderMin
+
+  // The stepped slider can't always land exactly on sliderMax, so its topmost
+  // reachable notch falls a step short of the balance. Treat anything within
+  // one step of the top as "pay the full balance" — otherwise maxing the slider
+  // leaves a small stub that costs a second month and phantom interest.
   const effectivePayment =
-    sliderValue[0] > 0 ? sliderValue[0] : sliderMin
+    rawPayment >= sliderMax - sliderStep ? balance : rawPayment
 
   const result = useMemo(
     () =>
@@ -204,7 +124,7 @@ export function PaymentCalculator() {
             value={[effectivePayment]}
             min={sliderMin}
             max={sliderMax}
-            step={Math.max(1, Math.round(sliderMax / 200))}
+            step={sliderStep}
             onValueChange={(v) => setSliderValue(Array.isArray(v) ? v : [v])}
             className="w-full"
           />
