@@ -7,6 +7,7 @@ import { AccountCards } from "@/components/dashboard/account-cards"
 import { PaymentCalculator } from "@/components/dashboard/payment-calculator"
 import { TransactionsPanel } from "@/components/dashboard/transactions-panel"
 import { RecurringPanel } from "@/components/dashboard/recurring-panel"
+import { ExportDialog } from "@/components/export/export-dialog"
 import { ChatFABWrapper } from "@/components/chat/chat-fab-wrapper"
 import { useDashboardStore } from "@/lib/store/dashboard-store"
 
@@ -102,7 +103,10 @@ export default function DashboardPage() {
 
       {/* Transactions Section */}
       <section id="transactions" className="scroll-mt-16">
-        <h2 className="text-lg font-semibold mb-4 sm:text-xl">Transactions</h2>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold sm:text-xl">Transactions</h2>
+          <ExportDialog />
+        </div>
         <TransactionsPanel
           transactions={transactions}
           accounts={accountsList}
