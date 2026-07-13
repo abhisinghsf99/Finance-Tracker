@@ -105,7 +105,7 @@ export default function DashboardPage() {
       <section id="transactions" className="scroll-mt-16">
         <div className="mb-4 flex items-center justify-between gap-3">
           <h2 className="text-lg font-semibold sm:text-xl">Transactions</h2>
-          <ExportDialog />
+          <ExportDialog label="Export to Excel" variant="default" />
         </div>
         <TransactionsPanel
           transactions={transactions}

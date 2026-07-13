@@ -11,6 +11,18 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
+
+interface ExportDialogProps {
+  /** Trigger button label. */
+  label?: string
+  /** Trigger button emphasis. */
+  variant?: "default" | "outline" | "secondary" | "ghost"
+  /** Hide the label below the `sm` breakpoint, leaving an icon-only trigger. */
+  responsiveLabel?: boolean
+  /** Extra classes for the trigger button. */
+  className?: string
+}
 
 function isoDaysAgo(days: number): string {
   const d = new Date()
@@ -22,7 +34,12 @@ function today(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
-export function ExportDialog() {
+export function ExportDialog({
+  label = "Export",
+  variant = "outline",
+  responsiveLabel = false,
+  className,
+}: ExportDialogProps = {}) {
   const [open, setOpen] = useState(false)
   const [start, setStart] = useState(() => isoDaysAgo(90))
   const [end, setEnd] = useState(() => today())
@@ -74,13 +91,15 @@ export function ExportDialog() {
   return (
     <>
       <Button
-        variant="outline"
+        variant={variant}
         size="sm"
         onClick={() => setOpen(true)}
-        className="gap-1.5"
+        className={cn("gap-1.5", className)}
       >
         <Download className="size-3.5" />
-        Export
+        <span className={responsiveLabel ? "hidden sm:inline" : undefined}>
+          {label}
+        </span>
       </Button>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
