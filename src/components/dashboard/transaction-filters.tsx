@@ -24,6 +24,8 @@ interface TransactionFiltersProps {
   accounts: { id: string; name: string }[]
   open: boolean
   onOpenChange: (open: boolean) => void
+  /** Element the popover drops down from (e.g. the toolbar's Filter button). */
+  anchor?: React.RefObject<HTMLElement | null>
   children?: React.ReactNode
 }
 
@@ -41,6 +43,7 @@ export function TransactionFilterPopover({
   accounts,
   open,
   onOpenChange,
+  anchor,
   children,
 }: TransactionFiltersProps) {
   const handleClearAll = () => {
@@ -57,6 +60,7 @@ export function TransactionFilterPopover({
       <PopoverContent
         className="w-72 max-sm:w-[calc(100vw-2rem)] p-4"
         align="end"
+        anchor={anchor}
       >
         <div className="flex flex-col gap-3">
           <h4 className="font-medium text-sm">Filters</h4>
@@ -115,7 +119,11 @@ export function TransactionFilterPopover({
               }
             >
               <SelectTrigger className="h-8 w-full text-xs">
-                <SelectValue placeholder="All categories" />
+                <SelectValue placeholder="All categories">
+                  {(value: string | null) =>
+                    value ? formatCategoryName(value) : "All categories"
+                  }
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
@@ -177,7 +185,13 @@ export function TransactionFilterPopover({
               }
             >
               <SelectTrigger className="h-8 w-full text-xs">
-                <SelectValue placeholder="All accounts" />
+                <SelectValue placeholder="All accounts">
+                  {(value: string | null) =>
+                    value
+                      ? accounts.find((a) => a.id === value)?.name ?? "Account"
+                      : "All accounts"
+                  }
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {accounts.map((acc) => (

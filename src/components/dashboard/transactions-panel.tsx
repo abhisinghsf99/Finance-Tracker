@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
 import { ChevronRight, X } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -85,6 +85,7 @@ export function TransactionsPanel({
   const [filters, setFilters] = useState<TransactionFilters>({})
   const [sortOption, setSortOption] = useState<SortOption>("date-desc")
   const [filterPopoverOpen, setFilterPopoverOpen] = useState(false)
+  const filterButtonRef = useRef<HTMLButtonElement | null>(null)
 
   // Debounce search input
   useEffect(() => {
@@ -223,6 +224,7 @@ export function TransactionsPanel({
               searchValue={searchInput}
               onSearchChange={setSearchInput}
               onFilterClick={() => setFilterPopoverOpen(!filterPopoverOpen)}
+              filterButtonRef={filterButtonRef}
               activeFilterCount={activeFilterCount}
               sortOption={sortOption}
               onSortChange={setSortOption}
@@ -235,6 +237,7 @@ export function TransactionsPanel({
               accounts={accounts}
               open={filterPopoverOpen}
               onOpenChange={setFilterPopoverOpen}
+              anchor={filterButtonRef}
             />
 
             {activeFilterCount > 0 && (

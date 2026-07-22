@@ -9,12 +9,15 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
 import { Search, Filter, ArrowUpDown, Check } from "lucide-react"
+import type * as React from "react"
 import type { SortOption } from "@/lib/transaction-filters"
 
 interface TransactionsToolbarProps {
   searchValue: string
   onSearchChange: (value: string) => void
   onFilterClick: () => void
+  /** Anchor for the filter popover, so it drops down from this button. */
+  filterButtonRef?: React.Ref<HTMLButtonElement>
   activeFilterCount: number
   sortOption: SortOption
   onSortChange: (sort: SortOption) => void
@@ -32,6 +35,7 @@ export function TransactionsToolbar({
   searchValue,
   onSearchChange,
   onFilterClick,
+  filterButtonRef,
   activeFilterCount,
   sortOption,
   onSortChange,
@@ -51,6 +55,7 @@ export function TransactionsToolbar({
 
       {/* Filter button */}
       <Button
+        ref={filterButtonRef}
         variant="outline"
         size="sm"
         onClick={onFilterClick}
