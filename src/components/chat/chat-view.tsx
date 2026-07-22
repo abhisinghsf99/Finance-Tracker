@@ -12,6 +12,20 @@ interface ChatViewProps {
   onClose: () => void;
 }
 
+// The API returns user-facing guidance in its error bodies (rate limits,
+// length caps) — surface it instead of a generic line when we can find it.
+function friendlyError(error: Error): string {
+  try {
+    const parsed = JSON.parse(error.message);
+    if (typeof parsed?.error === 'string') return parsed.error;
+  } catch {
+    if (error.message && error.message.length < 200 && !/^\s*[<{]/.test(error.message)) {
+      return error.message;
+    }
+  }
+  return 'Something went wrong. Try again.';
+}
+
 export function ChatView({ onClose }: ChatViewProps) {
   const { messages, sendMessage, status, setMessages, error } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -88,7 +102,7 @@ export function ChatView({ onClose }: ChatViewProps) {
       {/* Error display */}
       {error && (
         <div className="px-4 py-2 text-sm text-red-400 bg-red-400/10 border-t border-red-400/20">
-          Something went wrong. Try again.
+          {friendlyError(error)}
         </div>
       )}
 
