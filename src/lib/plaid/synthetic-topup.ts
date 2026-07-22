@@ -21,11 +21,11 @@ const NON_SPENDING = ['TRANSFER_OUT', 'TRANSFER_IN', 'LOAN_PAYMENTS', 'BANK_FEES
 const MONTHLY_SUBSCRIPTIONS = [
   { merchant: 'Netflix', amount: 19.57, dayOfMonth: 10 },
   { merchant: 'Spotify', amount: 12.65, dayOfMonth: 10 },
-  { merchant: 'OpenAI', amount: 20.0, dayOfMonth: 10 },
-  { merchant: 'APPLE.COM/BILL', amount: 16.99, dayOfMonth: 10 },
-  { merchant: 'Planet Fitness', amount: 25.98, dayOfMonth: 5 },
-  { merchant: 'Amazon Prime', amount: 2.99, dayOfMonth: 24 },
-  { merchant: 'Amazon Prime Video', amount: 0.99, dayOfMonth: 29 },
+  { merchant: 'Anthropic', amount: 20.0, dayOfMonth: 10 },
+  { merchant: 'Apple iCloud+', amount: 9.99, dayOfMonth: 10 },
+  { merchant: 'Apple', amount: 16.99, dayOfMonth: 10 },
+  { merchant: '24 Hour Fitness', amount: 25.98, dayOfMonth: 5 },
+  { merchant: 'Amazon Prime', amount: 14.99, dayOfMonth: 24 },
 ]
 
 /** The demo's recurring weekly income deposit (Saturdays, mirrors seed data). */

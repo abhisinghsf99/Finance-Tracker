@@ -95,7 +95,13 @@ export function detectRecurring(transactions: Transaction[]): RecurringCharge[] 
   }
 
   return Array.from(groups.entries())
-    .filter(([, txns]) => txns.length >= 2 || isLikelySubscription(txns[0]))
+    .filter(
+      ([, txns]) =>
+        txns.length >= 2 ||
+        // A lone keyword match only counts when it's priced like a service
+        // fee — a one-off $1,100 Apple Store purchase is not a subscription.
+        (isLikelySubscription(txns[0]) && roundAmount(txns[0].amount) <= 50)
+    )
     .map(([, txns]) => {
       const sorted = [...txns].sort((a, b) => b.date.localeCompare(a.date))
       return {
