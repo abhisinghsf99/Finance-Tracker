@@ -26,6 +26,7 @@ const MONTHLY_SUBSCRIPTIONS = [
   { merchant: 'Apple', amount: 16.99, dayOfMonth: 10 },
   { merchant: '24 Hour Fitness', amount: 25.98, dayOfMonth: 5 },
   { merchant: 'Amazon Prime', amount: 14.99, dayOfMonth: 24 },
+  { merchant: 'DNH*GODADDY#XXXXXXXXXX', amount: 23.19, dayOfMonth: 10 },
 ]
 
 /** The demo's recurring weekly income deposit (Saturdays, mirrors seed data). */
