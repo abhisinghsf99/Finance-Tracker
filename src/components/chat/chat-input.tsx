@@ -30,13 +30,16 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2">
       <div className="flex-1 flex items-center border border-border rounded-full px-4 py-2 bg-muted/50">
+        {/* Deliberately never disabled: disabling drops keyboard focus and the
+            user has to click the box again for every message. Typing stays
+            available while the assistant responds; only sending is gated. */}
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Ask about your finances..."
-          disabled={disabled}
+          autoFocus
           className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground"
         />
       </div>
