@@ -65,8 +65,8 @@ const SUBSCRIPTION_KEYWORDS = new Set([
   "youtube", "amazon prime", "chatgpt", "openai", "claude", "anthropic",
   "github", "notion", "figma", "vercel", "dropbox", "google storage",
   "adobe", "microsoft 365", "zoom", "slack", "linear", "1password",
-  "nordvpn", "expressvpn", "planet fitness", "comcast", "att", "verizon",
-  "t-mobile", "xfinity",
+  "nordvpn", "expressvpn", "planet fitness", "24 hour fitness", "godaddy",
+  "comcast", "att", "verizon", "t-mobile", "xfinity",
 ])
 
 export function isLikelySubscription(t: Transaction): boolean {
