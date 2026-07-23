@@ -11,12 +11,12 @@
 export const CATEGORY_COLORS: Record<string, string> = {
   // Chart-visible spending categories
   GENERAL_MERCHANDISE: "hsl(38, 75%, 57%)", // amber
-  FOOD_AND_DRINK: "hsl(168, 52%, 46%)", // teal
+  FOOD_AND_DRINK: "hsl(168, 62%, 40%)", // deep teal
   GENERAL_SERVICES: "hsl(222, 62%, 58%)", // royal blue
   TRANSPORTATION: "hsl(203, 72%, 72%)", // sky blue
-  ENTERTAINMENT: "hsl(320, 45%, 65%)", // orchid
+  ENTERTAINMENT: "hsl(315, 62%, 64%)", // magenta
   PERSONAL_CARE: "hsl(48, 70%, 68%)", // soft gold
-  OTHER: "hsl(220, 12%, 62%)", // slate
+  OTHER: "hsl(220, 10%, 76%)", // pale neutral grey
 
   // Badge-only categories (excluded from spending charts)
   INCOME: "hsl(160, 50%, 55%)", // green
