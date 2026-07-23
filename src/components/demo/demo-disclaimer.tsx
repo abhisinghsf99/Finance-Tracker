@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FlaskConical } from "lucide-react"
 import {
   Dialog,
@@ -31,6 +31,9 @@ function clearWelcomeCookie() {
  */
 export function DemoDisclaimer() {
   const [open, setOpen] = useState(false)
+  // Land initial focus on the CTA — otherwise the dialog focuses its first
+  // focusable element, drawing a focus ring around the Plaid docs link.
+  const gotItRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     if (hasWelcomeCookie()) {
@@ -46,7 +49,7 @@ export function DemoDisclaimer() {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton={false}>
+      <DialogContent showCloseButton={false} initialFocus={gotItRef}>
         <DialogHeader>
           <span className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
             <FlaskConical className="size-5" />
@@ -66,7 +69,7 @@ export function DemoDisclaimer() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={() => handleOpenChange(false)} className="h-9">
+          <Button ref={gotItRef} onClick={() => handleOpenChange(false)} className="h-9">
             Got it
           </Button>
         </DialogFooter>
