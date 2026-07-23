@@ -182,6 +182,11 @@ export async function POST(req: Request) {
             return { error: `Failed to fetch transactions: ${error.message}` };
           }
 
+          const { data: accounts } = await supabase.from('accounts').select('id, name');
+          const accountNames = new Map(
+            (accounts ?? []).map((a: { id: string; name: string | null }) => [a.id, a.name ?? 'Unknown'])
+          );
+
           const allCharges = detectRecurring(data as Transaction[]);
           const charges = allCharges.filter(c =>
             c.transactions.some(t => isLikelySubscription(t))
@@ -195,6 +200,8 @@ export async function POST(req: Request) {
               frequency: c.frequency,
               lastCharged: c.lastChargeDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$2-$3-$1'),
               occurrences: c.chargeCount,
+              account: accountNames.get(c.transactions[0].account_id) ?? 'Unknown',
+              category: c.transactions[0].category_primary,
             })),
             count: charges.length,
             estimatedMonthlyTotal: Math.round(monthlyTotal * 100) / 100,
